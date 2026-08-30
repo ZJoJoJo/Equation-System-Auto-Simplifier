@@ -377,6 +377,9 @@ python tests/test_features.py
 - **前端**：HTML + CSS + JavaScript + KaTeX
 - **桌面包装**：pywebview + waitress（生产级 WSGI 服务器）
 - **启动器**：C# 编译的原生 exe（自动环境检测与设置）
+---
+
+本人不具备项目维护能力，大家下载源码后，可自行开发以及维护。
 
 ---
 
