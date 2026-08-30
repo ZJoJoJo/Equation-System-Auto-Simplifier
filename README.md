@@ -313,6 +313,7 @@ python app.py --web
 ---
 
 ### 示例
+<img width="1263" height="1019" alt="image" src="https://github.com/user-attachments/assets/5f56743c-3b40-45de-9198-aa824eda3516" />
 
 #### 电路传输函数（含希腊字母）
 ```
