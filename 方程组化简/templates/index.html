@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方程组自动化简软件</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- KaTeX（本地离线版） -->
+    <link rel="stylesheet" href="/static/vendor/katex/katex.min.css">
+    <script defer src="/static/vendor/katex/katex.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部标题栏 -->
+        <header class="app-header">
+            <h1>方程组自动化简</h1>
+            <span class="header-sub">Equation Simplifier</span>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧：输入区 + 参数设置 -->
+            <div class="left-panel">
+                <!-- 公式输入区 -->
+                <section class="panel">
+                    <h2 class="panel-title">公式输入</h2>
+                    <p class="panel-hint">每行一个方程，用 = 分隔。支持下划线下标（如 v_1、R_12、a_xy），下划线后所有字符均为下标。</p>
+                    <textarea id="equations-input" class="input-area" rows="10"
+                        placeholder="示例：&#10;v_1 = I_1 * R_1&#10;v_2 = I_2 * R_2&#10;I_1 = I_2&#10;v_1 + v_2 = V_total"></textarea>
+                    <div class="input-meta">
+                        <span id="var-count">变量：-</span>
+                        <span id="eq-count">方程：0</span>
+                    </div>
+                </section>
+
+                <!-- 自定义参数设置区 -->
+                <section class="panel">
+                    <h2 class="panel-title">自定义参数</h2>
+
+                    <!-- 中间变量 -->
+                    <div class="param-group">
+                        <label class="param-label">中间变量（最终输出屏蔽）</label>
+                        <input type="text" id="intermediate-vars" class="param-input"
+                            placeholder="多个变量用逗号分隔，如 I_1, I_2">
+                        <p class="param-desc">标记的变量全程参与运算，但最终结果中自动剔除。</p>
+                    </div>
+
+                    <!-- 目标结果 -->
+                    <div class="param-group">
+                        <label class="param-label">目标结果（指定输出形式）</label>
+                        <input type="text" id="target-exprs" class="param-input"
+                            placeholder="如 v_1, v_2, v_1/v_2（留空则输出所有非中间变量）">
+                        <p class="param-desc">支持单一变量、变量分式、多变量组合表达式。</p>
+                    </div>
+
+                    <!-- 合并变量 -->
+                    <div class="param-group">
+                        <label class="param-label">同类项合并变量</label>
+                        <input type="text" id="merge-vars" class="param-input"
+                            placeholder="如 x, y（将含该变量的项自动合并）">
+                        <p class="param-desc">扫描结果每一项，将包含指定变量的项归类合并。</p>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="button-group">
+                        <button id="simplify-btn" class="btn btn-primary">化 简</button>
+                        <button id="clear-btn" class="btn btn-secondary">清 空</button>
+                        <button id="example-btn" class="btn btn-secondary">加载示例</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 右侧：预览区 + 结果区 -->
+            <div class="right-panel">
+                <!-- 实时渲染预览区 -->
+                <section class="panel">
+                    <h2 class="panel-title">实时渲染预览</h2>
+                    <div id="preview-area" class="preview-area">
+                        <p class="placeholder-text">输入公式后此处实时渲染</p>
+                    </div>
+                </section>
+
+                <!-- 最终结果输出区 -->
+                <section class="panel">
+                    <h2 class="panel-title">化简结果</h2>
+                    <div id="result-area" class="result-area">
+                        <p class="placeholder-text">点击「化简」按钮查看结果</p>
+                    </div>
+                </section>
+
+                <!-- 化简步骤 -->
+                <section class="panel" id="steps-panel" style="display:none;">
+                    <h2 class="panel-title">化简步骤</h2>
+                    <div id="steps-area" class="steps-area"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 输入帮助（可折叠，默认收起） -->
+        <div class="help-panel">
+            <button class="help-toggle" id="help-toggle">输入帮助 ▾</button>
+            <div class="help-content" id="help-content" style="display:none;">
+                <div class="help-grid">
+                    <div class="help-section">
+                        <h3>希腊字母变量</h3>
+                        <p class="help-desc">在希腊字母名称前加 <code>/</code> 即识别为变量（直接输入则为数学函数）</p>
+                        <div class="help-table">
+                            <div class="help-row"><code>/alpha</code><span>→ α</span></div>
+                            <div class="help-row"><code>/beta</code><span>→ β</span></div>
+                            <div class="help-row"><code>/gamma</code><span>→ γ</span></div>
+                            <div class="help-row"><code>/delta</code><span>→ δ</span></div>
+                            <div class="help-row"><code>/epsilon</code><span>→ ε</span></div>
+                            <div class="help-row"><code>/theta</code><span>→ θ</span></div>
+                            <div class="help-row"><code>/lambda</code><span>→ λ</span></div>
+                            <div class="help-row"><code>/mu</code><span>→ μ</span></div>
+                            <div class="help-row"><code>/pi</code><span>→ π</span></div>
+                            <div class="help-row"><code>/sigma</code><span>→ σ</span></div>
+                            <div class="help-row"><code>/phi</code><span>→ φ</span></div>
+                            <div class="help-row"><code>/omega</code><span>→ ω</span></div>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <h3>基本运算</h3>
+                        <div class="help-table">
+                            <div class="help-row"><code>+  -  *  /</code><span>加减乘除</span></div>
+                            <div class="help-row"><code>x^2</code> 或 <code>x**2</code><span>→ x²</span></div>
+                            <div class="help-row"><code>2x</code><span>→ 2*x（隐式乘法）</span></div>
+                            <div class="help-row"><code>(x+1)(x-1)</code><span>→ (x+1)*(x-1)</span></div>
+                        </div>
+                        <h3 style="margin-top:12px;">常用函数</h3>
+                        <div class="help-table">
+                            <div class="help-row"><code>sqrt(x)</code><span>平方根 √x</span></div>
+                            <div class="help-row"><code>sin(x) cos(x) tan(x)</code><span>三角函数</span></div>
+                            <div class="help-row"><code>exp(x)</code><span>指数 eˣ</span></div>
+                            <div class="help-row"><code>log(x)</code><span>自然对数 ln x</span></div>
+                            <div class="help-row"><code>abs(x)</code><span>绝对值 |x|</span></div>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <h3>下标变量</h3>
+                        <p class="help-desc">用下划线 <code>_</code> 表示下标，下划线后所有字符均为下标</p>
+                        <div class="help-table">
+                            <div class="help-row"><code>v_1</code><span>→ v₁</span></div>
+                            <div class="help-row"><code>R_12</code><span>→ R₁₂（多位数下标）</span></div>
+                            <div class="help-row"><code>a_xy</code><span>→ a_xy（字母下标）</span></div>
+                            <div class="help-row"><code>V_out</code><span>→ V_out</span></div>
+                        </div>
+                        <h3 style="margin-top:12px;">方程组格式</h3>
+                        <div class="help-table">
+                            <div class="help-row"><code>每行一个方程</code><span>用 = 分隔</span></div>
+                            <div class="help-row"><code># 注释行</code><span>以 # 开头忽略</span></div>
+                            <div class="help-row"><code>空行</code><span>自动忽略</span></div>
+                        </div>
+                        <h3 style="margin-top:12px;">自定义参数</h3>
+                        <div class="help-table">
+                            <div class="help-row"><code>中间变量</code><span>参与运算但结果中屏蔽</span></div>
+                            <div class="help-row"><code>目标结果</code><span>指定输出形式，如 v_1/v_2</span></div>
+                            <div class="help-row"><code>合并变量</code><span>按指定变量合并同类项</span></div>
+                            <div class="help-row"><code>Ctrl+Enter</code><span>快捷执行化简</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部状态栏 -->
+        <footer class="app-footer">
+            <span id="status-text">就绪</span>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

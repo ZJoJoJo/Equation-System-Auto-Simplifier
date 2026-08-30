@@ -1,0 +1,470 @@
+/* ============================================
+   方程组自动化简软件 - 极简风格样式
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-hover: #f1f3f5;
+    --border: #e9ecef;
+    --border-focus: #4a90d9;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-hint: #adb5bd;
+    --accent: #4a90d9;
+    --accent-hover: #357abd;
+    --success: #28a745;
+    --error: #dc3545;
+    --radius: 6px;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ---------- 顶部标题栏 ---------- */
+.app-header {
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.app-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.header-sub {
+    font-size: 12px;
+    color: var(--text-hint);
+    letter-spacing: 0.5px;
+}
+
+/* ---------- 主内容区 ---------- */
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 16px;
+    padding: 16px;
+}
+
+.left-panel,
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.left-panel {
+    flex: 0 0 420px;
+}
+
+/* ---------- 面板 ---------- */
+.panel {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+}
+
+.panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* ---------- 输入区 ---------- */
+.input-area {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 160px;
+    transition: border-color 0.2s;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.input-area:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    background: var(--bg-primary);
+}
+
+.input-area::placeholder {
+    color: var(--text-hint);
+}
+
+.input-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ---------- 参数设置 ---------- */
+.param-group {
+    margin-bottom: 14px;
+}
+
+.param-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.param-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: "Consolas", "Monaco", monospace;
+    transition: border-color 0.2s;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.param-input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    background: var(--bg-primary);
+}
+
+.param-input::placeholder {
+    color: var(--text-hint);
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+}
+
+.param-desc {
+    font-size: 11px;
+    color: var(--text-hint);
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+/* ---------- 按钮 ---------- */
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* ---------- 预览区 / 结果区 ---------- */
+.preview-area,
+.result-area {
+    min-height: 120px;
+    max-height: 320px;
+    overflow-y: auto;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+}
+
+.result-area {
+    max-height: 280px;
+}
+
+.placeholder-text {
+    color: var(--text-hint);
+    font-size: 13px;
+    text-align: center;
+    padding: 30px 0;
+}
+
+/* 预览区每行公式 */
+.preview-line {
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+}
+
+.preview-line:last-child {
+    border-bottom: none;
+}
+
+/* 结果项 */
+.result-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-target {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-family: "Consolas", monospace;
+}
+
+.result-expr {
+    font-size: 15px;
+    padding-left: 8px;
+}
+
+/* 变量标签 */
+.var-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.var-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 11px;
+    font-family: "Consolas", monospace;
+    color: var(--text-secondary);
+}
+
+.var-tag.intermediate {
+    background: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.var-tag.target {
+    background: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+/* ---------- 步骤区 ---------- */
+.steps-area {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.steps-area .step-item {
+    padding-left: 16px;
+    position: relative;
+}
+
+.steps-area .step-item::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+/* ---------- 错误提示 ---------- */
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* ---------- 底部状态栏 ---------- */
+.app-footer {
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    padding: 6px 24px;
+    font-size: 12px;
+    color: var(--text-hint);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* ---------- KaTeX 公式大小调整 ---------- */
+.katex {
+    font-size: 1.05em;
+}
+
+.katex-display {
+    margin: 0.3em 0;
+}
+
+/* ---------- 输入帮助面板 ---------- */
+.help-panel {
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.help-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 6px 24px;
+    font-size: 12px;
+    color: var(--text-hint);
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s;
+}
+
+.help-toggle:hover {
+    color: var(--text-secondary);
+}
+
+.help-content {
+    padding: 0 24px 16px 24px;
+    border-top: 1px solid var(--border);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.help-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.help-desc {
+    font-size: 11px;
+    color: var(--text-hint);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.help-table {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.help-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.help-row code {
+    background: var(--bg-secondary);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.help-row span {
+    color: var(--text-secondary);
+    font-size: 11px;
+}

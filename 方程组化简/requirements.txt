@@ -1,0 +1,4 @@
+flask>=3.0
+sympy>=1.12
+pywebview>=5.0
+waitress>=3.0
